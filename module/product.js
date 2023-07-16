@@ -12,7 +12,11 @@ const getProductsFromFile = cb => {
     if (err) {
       cb([]);
     } else {
-      cb(JSON.parse(fileContent));
+      if (fileContent.length === 0) {
+        cb([]); // Empty file, return an empty array
+      } else {
+        cb(JSON.parse(fileContent)); // Parse the JSON data
+      }
     }
   });
 };
@@ -28,9 +32,7 @@ module.exports = class Product {
   save() {
     getProductsFromFile(products => {
       products.push(this);
-      fs.writeFile(p, JSON.stringify(products), err => {
-        console.log(err);
-      });
+      fs.writeFile(p, JSON.stringify(products), err => {});
     });
   }
 
